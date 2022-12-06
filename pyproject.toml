@@ -5,6 +5,10 @@ description = ""
 authors = ["user.name <gmail@hdknr.com>"]
 readme = ["README.md"]
 
+[tool.poetry.scripts]
+contentman = "contentman.runner:main"
+
+
 [tool.poetry.dependencies]
 python = "^3.9"
 django-environ = "^0.9.0"
