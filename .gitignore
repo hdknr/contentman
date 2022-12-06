@@ -1,0 +1,33 @@
+db.sqlite3
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.idea/
+pycheck.lo
+/jupyter.log
+.ipynb_checkpoints/
+images/
+*/png
+models/
+.scrapy/
+media/
+static/
+
+# csv
+csv/
+data.csv
+
+# terraform
+.terraform
+terraform.d
+node_modules
+terraform.tfstate*
+*.plan
+
+# environ
+.env
+.secrets
+
+# mkdocs
+storage/docs/
