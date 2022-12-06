@@ -1,10 +1,11 @@
-'''
+"""
 https://django-environ.readthedocs.io/en/latest/
-'''
+"""
 from pathlib import Path
 
 import click
 import environ as E
+
 from .contents.commands import content
 
 
