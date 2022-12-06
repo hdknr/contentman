@@ -28,7 +28,5 @@ def contenttype_list(ctx, path):
     contenttype_set = man.cotennttype_set
     for item in contenttype_set.items:
         data = item.to_json()
-        with open(
-            Path(path) / f"{man.space_name}.{data['sys']['id']}.json", "w"
-        ) as out:
+        with open(Path(path) / f"{man.space_name}.{data['sys']['id']}.json", "w") as out:
             json.dump(data, out, ensure_ascii=False, indent=2, cls=JSONEncoder)
