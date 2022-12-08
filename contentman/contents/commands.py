@@ -40,17 +40,15 @@ def contenttype_list(ctx, path):
 
 
 @content.command
-@click.option("--content_type", "-t", default=None)
+@click.argument("content_type")
+@click.argument("queries", nargs=-1)
 @click.pass_context
-def entry_list(ctx, content_type):
+def entry_list(ctx, content_type, queries):
     """Entry (list)"""
     env = ctx.obj["env"]
     model = factory(models.Entry, env)
 
-    query = dict(
-        content_type=content_type,
-    )
-    query["fields.pagePath.ja"] = "/"
+    query = dict((("content_type", content_type),) + tuple(i.split("=") for i in queries))
 
     for item in model.list(**query).items:
         data = item.to_json()
