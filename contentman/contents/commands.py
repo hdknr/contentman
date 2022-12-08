@@ -5,6 +5,7 @@ import click
 
 from . import models
 from .serializer import JSONEncoder
+from .translation import walk_translate
 
 
 @click.group()
@@ -53,3 +54,19 @@ def entry_list(ctx, content_type, queries):
     for item in model.list(**query).items:
         data = item.to_json()
         print(dumps(data))
+
+
+@content.command
+@click.argument("excludes", nargs=-1)
+@click.pass_context
+def entry_translate(ctx, excludes):
+    """Entry Translate"""
+
+    data = json.load(open("/tmp/b.json"))
+
+    translated = dict()
+    root = "fields"
+    node = data[root]
+
+    walk_translate(translated, node, root, excludes=excludes)
+    print(translated)
