@@ -32,6 +32,11 @@ class AbstractEntity(Client):
 
 
 class ContentType(AbstractEntity):
+    """
+    Content Types(https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-types)
+    Python(https://contentful.github.io/contentful-management.py/contentful_management.html?highlight=update#module-contentful_management.content_type)
+    """
+
     @property
     def entity_objects(self):
         return self.client.content_types(self.space_id, self.environment_id)
