@@ -52,5 +52,4 @@ def entry_list(ctx, content_type, queries):
 
     for item in model.list(**query).items:
         data = item.to_json()
-        print(dumps(data["fields"]))
-        print("\n\n\n")
+        print(dumps(data))
