@@ -1,20 +1,16 @@
-import json
 from pathlib import Path
 
 import click
 
 from . import models
-from .serializer import JSONEncoder
+from .serializer import dump, dumps
+from .translation import find_node, translate
 
 
 @click.group()
 @click.pass_context
 def content(ctx):
     pass
-
-
-def dumps(data):
-    return json.dumps(data, ensure_ascii=False, indent=2, cls=JSONEncoder)
 
 
 def factory(cls, env):
@@ -36,7 +32,7 @@ def contenttype_list(ctx, path):
     for item in model.list().items:
         data = item.to_json()
         with open(Path(path) / f"{model.space_name}.{data['sys']['id']}.json", "w") as out:
-            json.dump(data, out, ensure_ascii=False, indent=2, cls=JSONEncoder)
+            dump(data, out)
 
 
 @content.command
@@ -53,3 +49,39 @@ def entry_list(ctx, content_type, queries):
     for item in model.list(**query).items:
         data = item.to_json()
         print(dumps(data))
+
+
+@content.command
+@click.argument("excludes", nargs=-1)
+@click.pass_context
+def entry_translate(ctx, excludes):
+    """Entry Translate"""
+    from functools import reduce
+
+    def _transale(attributes, path, lang_to):
+        splited = path.split(".")
+        lang_from = splited[-1]
+        node = reduce(lambda a, i: a[i], splited[:-1], attributes)
+        node[lang_to] = translate(node[lang_from], lang_from, lang_to)
+
+    env = ctx.obj["env"]
+    model = factory(models.Entry, env)
+
+    query = dict((("content_type", "page"), ("fields.pagePath.ja", "/debug")))
+
+    lang_from = "ja"
+    lang_to = "en"
+    root = "fields"
+    for item in model.list(**query).items:
+        data = item.to_json()
+        paths = []
+
+        find_node(paths, data[root], lang_from=lang_from, lang_to=lang_to, path=root)
+        results = set(paths) - set(excludes)
+        if not results:
+            continue
+
+        for path in results:
+            _transale(data, path, lang_to)
+
+        item.update(attributes=data)
