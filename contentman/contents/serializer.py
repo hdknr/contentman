@@ -19,3 +19,11 @@ class JSONEncoder(json.JSONEncoder):
             return o.to_json()
         else:
             return super().default(o)
+
+
+def dumps(data):
+    return json.dumps(data, ensure_ascii=False, indent=2, cls=JSONEncoder)
+
+
+def dump(data, out):
+    json.dump(data, out, ensure_ascii=False, indent=2, cls=JSONEncoder)
