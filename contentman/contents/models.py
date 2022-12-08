@@ -26,8 +26,10 @@ class AbstractEntity(Client):
         raise NotImplementedError() 
 
     def list(self, **query):
+        # Filtering
+        # - https://www.contentful.com/developers/docs/concepts/relational-queries/
         return self.entity_objects.all(query=query)
-    
+
 
 class ContentType(AbstractEntity):
     @property
