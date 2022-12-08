@@ -45,6 +45,8 @@ def entry_list(ctx, content_type):
     query = dict(
         content_type=content_type,
     )
+    query["fields.pagePath.ja"] = "/"
+
     for item in model.list(**query).items:
         data = item.to_json()
         print(data)
