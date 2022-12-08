@@ -61,12 +61,32 @@ def entry_list(ctx, content_type, queries):
 @click.pass_context
 def entry_translate(ctx, excludes):
     """Entry Translate"""
+    from functools import reduce
 
-    data = json.load(open("/tmp/b.json"))
+    def _transale(attributes, path, lang_to):
+        splited = path.split(".")
+        lang_from = splited[-1]
+        node = reduce(lambda a, i: a[i], splited[:-1], attributes)
+        node[lang_to] = translate(node[lang_from], lang_from, lang_to)
 
-    translated = dict()
+    env = ctx.obj["env"]
+    model = factory(models.Entry, env)
+
+    query = dict((("content_type", "page"), ("fields.pagePath.ja", "/debug")))
+
+    lang_from = "ja"
+    lang_to = "en"
     root = "fields"
-    node = data[root]
+    for item in model.list(**query).items:
+        data = item.to_json()
+        paths = []
 
-    walk_translate(translated, node, root, excludes=excludes)
-    print(translated)
+        find_node(paths, data[root], lang_from=lang_from, lang_to=lang_to, path=root)
+        results = set(paths) - set(excludes)
+        if not results:
+            continue
+
+        for path in results:
+            _transale(data, path, lang_to)
+
+        item.update(attributes=data)
