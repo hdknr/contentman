@@ -13,6 +13,10 @@ def content(ctx):
     pass
 
 
+def dumps(data):
+    return json.dumps(data, ensure_ascii=False, indent=2, cls=JSONEncoder)
+
+
 def factory(cls, env):
     return cls(
         token=env.str("CONTENTFUL_MANAGEMENT_TOKEN"),
@@ -20,6 +24,7 @@ def factory(cls, env):
         space_name=env.str("CONTENTFUL_SPACNE_NAME"),
         environment_id=env.str("CONTENTFUL_ENVIRONMENT"),
     )
+
 
 @content.command
 @click.option("--path", default="/tmp")
@@ -38,7 +43,7 @@ def contenttype_list(ctx, path):
 @click.option("--content_type", "-t", default=None)
 @click.pass_context
 def entry_list(ctx, content_type):
-    """ Entry (list)"""
+    """Entry (list)"""
     env = ctx.obj["env"]
     model = factory(models.Entry, env)
 
@@ -49,5 +54,5 @@ def entry_list(ctx, content_type):
 
     for item in model.list(**query).items:
         data = item.to_json()
-        print(data)
+        print(dumps(data["fields"]))
         print("\n\n\n")

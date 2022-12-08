@@ -1,4 +1,4 @@
-import contentful
+# import contentful
 import contentful_management
 from pydantic import BaseModel, Field
 
@@ -12,6 +12,7 @@ class Client(BaseModel):
     space_id: str = Field(description="Space ID")
     space_name: str = Field(description="Space Name")
     environment_id: str = Field(description="Environment ID")
+
     class Config:
         arbitrary_types_allowed = True
 
@@ -23,7 +24,7 @@ class Client(BaseModel):
 class AbstractEntity(Client):
     @property
     def entity_objects(cls):
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def list(self, **query):
         # Filtering
@@ -51,4 +52,3 @@ class Entry(AbstractEntity):
     @property
     def entity_objects(self):
         return self.client.entries(self.space_id, self.environment_id)
-
