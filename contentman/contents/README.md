@@ -12,3 +12,7 @@ poetry add contentful_management contentful
 
 - [Content Delivery API](https://www.contentful.com/developers/docs/references/content-delivery-api/)
 - [Content Management API](https://www.contentful.com/developers/docs/references/content-management-api/)
+
+### Concepts
+
+- [Filter API results with relational queries](https://www.contentful.com/developers/docs/concepts/relational-queries/)
