@@ -38,6 +38,11 @@ class ContentType(AbstractEntity):
 
 
 class Entry(AbstractEntity):
+    """
+    Entries(https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/entries)
+    https://contentful.github.io/contentful-management.py/contentful_management.html?highlight=update#module-contentful_management.entry
+    """
+
     @property
     def entity_objects(self):
         return self.client.entries(self.space_id, self.environment_id)
