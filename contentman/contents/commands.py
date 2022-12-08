@@ -1,21 +1,16 @@
-import json
 from pathlib import Path
 
 import click
 
 from . import models
-from .serializer import JSONEncoder
-from .translation import walk_translate
+from .serializer import dump, dumps
+from .translation import find_node, translate
 
 
 @click.group()
 @click.pass_context
 def content(ctx):
     pass
-
-
-def dumps(data):
-    return json.dumps(data, ensure_ascii=False, indent=2, cls=JSONEncoder)
 
 
 def factory(cls, env):
@@ -37,7 +32,7 @@ def contenttype_list(ctx, path):
     for item in model.list().items:
         data = item.to_json()
         with open(Path(path) / f"{model.space_name}.{data['sys']['id']}.json", "w") as out:
-            json.dump(data, out, ensure_ascii=False, indent=2, cls=JSONEncoder)
+            dump(data, out)
 
 
 @content.command
